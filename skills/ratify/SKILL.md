@@ -19,7 +19,7 @@ Apply the owner's decision on pending proposals: promote staged artifacts into t
 ## Initialization Guard (Prerequisite)
 
 Before running ratify, check if the current repository is initialized with Autopoietic Harness:
-- Verify that `kb/governance/constitution.md` or `.autopoietic/enabled` exists in the working repository root (`$CLAUDE_PROJECT_DIR`).
+- Verify that `kb/governance/constitution.md`, `.autopoietic/enabled`, or `.claude-plugin/plugin.json` exists in the working repository root (`$CLAUDE_PROJECT_DIR`).
 - **If NOT initialized**: Stop immediately and tell the owner:
   > ⚠️ **Autopoietic Harness is not initialized in this repository.**  
   > Please run `/autopoietic-harness:init` first to scaffold the local governance structure and knowledge base.
@@ -35,10 +35,14 @@ Before running ratify, check if the current repository is initialized with Autop
    - **Why it's needed** — the friction or gap it solves.
    - **Before vs. after** — what stays true today if rejected, what becomes true if adopted.
    - **Risks & dissents** — panel objections, edge cases, potential breakages.
-3. **Target Destination Selection (Maintainer Upstream Mode)**:
-   - For each proposal to be adopted, ask the owner whether to:
-     - **Option A: Adopt Locally (Target Repository)**: Apply staged changes and KB entries directly to the current repository (`kb/`, `.autopoietic/staging/`).
-     - **Option B: Promote Upstream (Maintainer Mode)**: Copy staged artifacts and KB entries directly into `$CLAUDE_PLUGIN_OPTION_PLUGIN_SOURCE_PATH` (e.g., `~/code/autopoietic-harness`) for global plugin distribution.
+3. **Target Destination Selection (Maintainer Upstream Mode Guard)**:
+   - Check if `$CLAUDE_PROJECT_DIR` is identical to `$CLAUDE_PLUGIN_OPTION_PLUGIN_SOURCE_PATH` (or contains `.claude-plugin/plugin.json`).
+   - If running inside the plugin engine itself:
+     - Inform owner: `[ENGINE MAINTAINER MODE ACTIVE] Adopting changes locally will update the plugin engine directly.`
+   - If running inside a consumer repository:
+     - For each proposal to be adopted, ask the owner whether to:
+       - **Option A: Adopt Locally (Target Repository)**: Apply staged changes and KB entries directly to the current repository (`kb/`, `.autopoietic/staging/`).
+       - **Option B: Promote Upstream (Maintainer Mode)**: Copy staged artifacts and KB entries directly into `$CLAUDE_PLUGIN_OPTION_PLUGIN_SOURCE_PATH` (e.g., `~/code/autopoietic-harness`) for global plugin distribution.
 4. **Single-screen, item-by-item decisions.** After the full manifest, take decisions in ONE step covering all items: a single selection prompt listing every item together.
 5. **Adopt:** verify the target tier is legitimate; apply the artifact to its designated location (Local or Upstream); set `status: adopted`.
 6. **Reject:** set `status: deprecated` with a checkbox-level rationale (e.g. "rejected — out of scope").

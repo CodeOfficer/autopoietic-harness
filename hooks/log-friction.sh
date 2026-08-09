@@ -14,7 +14,7 @@ mkdir -p "$repo_dir/.autopoietic/friction"
 
 (
   python3 -c '
-import json, sys, datetime, re
+import json, sys, datetime, re, os
 
 SECRET_REGEX = re.compile(r"(sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{20,}|bearer\s+[a-zA-Z0-9\._\-]+|password=[\"\x27]?[^\"\x27\s]+[\"\x27]?)", re.IGNORECASE)
 
@@ -30,15 +30,20 @@ if tool_name.startswith("mcp__"):
 detail_str = str(d.get("tool_response") or d.get("reason") or d.get("tool_input") or "")
 redacted_detail = SECRET_REGEX.sub("[REDACTED_SECRET]", detail_str)[:2000]
 
+repo_dir = sys.argv[2]
+is_engine = os.path.exists(os.path.join(repo_dir, ".claude-plugin", "plugin.json"))
+context_tag = "engine_maintainer" if is_engine else "consumer"
+
 out = {
     "ts": datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
     "event": sys.argv[1],
     "session": d.get("session_id"),
+    "context": context_tag,
     "tool": tool_name if tool_name else None,
     "detail": redacted_detail if redacted_detail else None,
 }
 print(json.dumps(out, default=str))
-' "${1:-unknown}" >> "$repo_dir/.autopoietic/friction/events.jsonl"
+' "${1:-unknown}" "$repo_dir" >> "$repo_dir/.autopoietic/friction/events.jsonl"
 ) 2>/dev/null || true
 
 exit 0
