@@ -12,6 +12,10 @@ lock="$hooks_dir/.review.lock"
 log="$hooks_dir/end-session-review.log"
 
 # One review at a time; a held lock means a review is already running.
+# A lock older than 60 min is from a crashed review — reclaim it.
+if [ -d "$lock" ] && [ -n "$(find "$lock" -maxdepth 0 -mmin +60 2>/dev/null)" ]; then
+  rmdir "$lock" 2>/dev/null
+fi
 mkdir "$lock" 2>/dev/null || exit 0
 
 today="$(date +%F)"
@@ -27,9 +31,10 @@ setsid bash -c '
   {
     echo "=== $(date -Is) end-session review starting"
     GOVERNANCE_REVIEW_HOOK=1 claude -p "$2" \
-      --allowedTools "Read,Glob,Grep,Write(kb/governance/amendments/**),Edit(kb/governance/amendments/**)"
+      --model claude-sonnet-5 \
+      --allowedTools "Read,Glob,Grep,Edit(kb/governance/amendments/**)"
     echo "=== $(date -Is) end-session review finished (exit $?)"
-  } >> "$3" 2>&1
+  } > "$3" 2>&1
   rmdir "$4" 2>/dev/null
 ' _ "$repo_dir" "$prompt" "$log" "$lock" < /dev/null > /dev/null 2>&1 &
 
