@@ -30,7 +30,7 @@ prompt="You are the automated end-session reviewer. Perform BOTH duties in this 
 
 1) Governance review, following .claude/skills/governance-convention/SKILL.md in end-session review mode: read kb/governance/constitution.md and every file in kb/governance/amendments/. If gaps or contradictions warrant it, write ONE file kb/governance/amendments/session-${today}.md (append -2, -3, ... if that name exists) with OKF frontmatter per kb/okf-format.md and status: proposed, and add it to the index there.
 
-2) Friction synthesis, following kb/self-improvement.md: read .claude/friction/events.pending.jsonl if it exists. Cluster recurring events by root cause. For each root cause, choose the cheapest fitting primitive per kb/primitive-selection.md and write kb/improvements/proposal-${today}-<slug>.md (status: proposed) stating the primitive, why cheaper ones don't suffice, the target tier (project-local unless graduation evidence: ratified in >=2 projects, or a stated project-agnostic argument), and acceptance criteria. Materialize any executable artifact under .claude/staging/<proposal-id>/. Add each proposal to kb/improvements/index.md.
+2) Friction synthesis, following kb/self-improvement.md: read .claude/friction/events.pending.jsonl if it exists. Cluster recurring events by root cause. For each root cause, choose the cheapest fitting primitive per kb/primitive-selection.md and write kb/improvements/proposal-${today}-<slug>.md (status: proposed) stating the primitive, why cheaper ones don't suffice, the target tier (project-local unless graduation evidence: ratified in >=2 projects, or a stated project-agnostic argument), and acceptance criteria. Materialize any executable artifact under .staging/<proposal-id>/. Add each proposal to kb/improvements/index.md.
 
 Per constitution Article 4: for either duty, if nothing new emerged, write nothing for it and say so. Do not modify any other file. Do not apply any proposal. Do not run git commands."
 
@@ -42,7 +42,7 @@ setsid bash -c '
     GOVERNANCE_REVIEW_HOOK=1 claude -p "$2" \
       --model claude-sonnet-5 \
       --disallowedTools "Bash" \
-      --allowedTools "Read,Glob,Grep,Edit(kb/governance/amendments/**),Edit(kb/improvements/**),Edit(.claude/staging/**)"
+      --allowedTools "Read,Glob,Grep,Edit(kb/governance/amendments/**),Edit(kb/improvements/**),Edit(.staging/**)"
     rc=$?
     [ "$rc" -eq 0 ] && rm -f "$5"
     echo "=== $(date -Is) end-session review finished (exit $rc)"

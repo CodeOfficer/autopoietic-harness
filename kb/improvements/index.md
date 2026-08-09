@@ -11,7 +11,7 @@ related: [kb-self-improvement, kb-gov-amendments-index]
 
 # Improvement Proposals
 
-Proposals produced by the automated end-session review (or manual sessions) from observed friction, named `proposal-YYYY-MM-DD-<slug>.md`, with `status: proposed`. Any executable artifact a proposal carries is quarantined in `.claude/staging/<proposal-id>/` and is inert until promoted.
+Proposals produced by the automated end-session review (or manual sessions) from observed friction, named `proposal-YYYY-MM-DD-<slug>.md`, with `status: proposed`. Any executable artifact a proposal carries is quarantined in `.staging/<proposal-id>/` and is inert until promoted.
 
 Proposals are **never applied automatically**. The owner decides via the `ratify` skill; decisions are recorded in the proposal file per constitution Article 1. See [../self-improvement.md](../self-improvement.md) for the lifecycle.
 

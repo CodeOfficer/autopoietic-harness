@@ -12,7 +12,7 @@ Apply the owner's decision on pending proposals: promote staged artifacts into t
 ## Inputs
 
 - Pending items: files with `status: proposed` listed in `kb/improvements/index.md` and `kb/governance/amendments/index.md`.
-- Their staged artifacts, if any, under `.claude/staging/<proposal-id>/`.
+- Their staged artifacts, if any, under `.staging/<proposal-id>/`.
 - The lifecycle rules in `kb/self-improvement.md`.
 
 ## Steps

@@ -21,5 +21,7 @@ Knowledge lives in layered `kb/` directories (Open Knowledge Format — see `kb/
 
 - `kb/` — repository-wide knowledge base
 - `kb/governance/` — AI-governance constitution and proposed amendments
+- `kb/improvements/` — friction-driven improvement proposals
 - `projects/` — individual projects (see `projects/CLAUDE.md`)
 - `.claude/skills/` — agent skills
+- `.staging/` — inert quarantine for artifacts of pending proposals (see `.staging/README.md`)
