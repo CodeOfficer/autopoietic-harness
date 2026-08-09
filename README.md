@@ -110,8 +110,6 @@ Configurable via `.claude-plugin/plugin.json` or environment variables:
 
 ## 5. Documentation & Test Suites
 
-- **[docs/MIGRATION-V1.md](docs/MIGRATION-V1.md)**: Architectural migration spec from single-repo to universal plugin.
-- **[docs/CONSOLIDATION-PROVENANCE.md](docs/CONSOLIDATION-PROVENANCE.md)**: Audit matrix, consolidation provenance, and attestation record.
 - **[docs/EXAMPLE-PROMPTS.md](docs/EXAMPLE-PROMPTS.md)**: Realistic example prompts and test suites for Consumer & Maintainer workflows.
 
 ---
