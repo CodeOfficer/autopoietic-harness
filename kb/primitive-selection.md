@@ -25,4 +25,6 @@ Choose the **cheapest primitive that plausibly kills the root cause**. Two order
 | Missing tool or repeated environment setup | script |
 | Unclear specs, undecidable tradeoffs, human bottleneck | process proposal to the owner — do not automate a human problem |
 
+**Before choosing any primitive, apply the half-life test.** If the fact would not survive a container rebuild or hold on another machine, it is volatile state, not knowledge — it earns no primitive at any tier. Which tools are installed, what is on `PATH`, and which ports are free all age in minutes; conventions and decisions age slowly. The repository outlives the machine, so recording machine state as durable knowledge is wrong even when the state is accurate at the moment of writing.
+
 Every proposal states the primitive chosen, why cheaper ones don't suffice, and acceptance criteria (constitution Article 6).

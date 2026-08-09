@@ -21,4 +21,5 @@ Proposals are **never applied automatically**. The owner decides via the `ratify
 - [proposal-2026-08-09-pending-proposals-visibility.md](proposal-2026-08-09-pending-proposals-visibility.md) — SessionStart hook surfacing the ratification queue — **adopted**
 - [proposal-2026-08-09-ratify-transparency.md](proposal-2026-08-09-ratify-transparency.md) — per-item plain-English manifest and granular decisions in ratify — **adopted**
 - [proposal-2026-08-09-test.md](proposal-2026-08-09-test.md) — dry-run test proposal (Friday ☕ commit marker) — **rejected**
+- [proposal-2026-08-09-friction-signal-quality.md](proposal-2026-08-09-friction-signal-quality.md) — iteration-vs-friction, observation-not-diagnosis, and half-life rules for ledger synthesis — **adopted**
 - ~~proposal-2026-08-09-sandbox-missing-tools~~ — claimed `lazygit`/`apt`/`snap` are absent; verification showed all three are installed. **Deleted 2026-08-09** as factually wrong at the premise.
