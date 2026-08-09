@@ -20,3 +20,4 @@ Proposals are **never applied automatically**. The owner decides via the `ratify
 - [proposal-2026-08-09-self-improvement-lifecycle.md](proposal-2026-08-09-self-improvement-lifecycle.md) — the friction-observation and promotion lifecycle itself — **adopted**
 - [proposal-2026-08-09-pending-proposals-visibility.md](proposal-2026-08-09-pending-proposals-visibility.md) — SessionStart hook surfacing the ratification queue — **adopted**
 - [proposal-2026-08-09-ratify-transparency.md](proposal-2026-08-09-ratify-transparency.md) — per-item plain-English manifest and granular decisions in ratify — **adopted**
+- [proposal-2026-08-09-test.md](proposal-2026-08-09-test.md) — dry-run test proposal (Friday ☕ commit marker) — **rejected**
