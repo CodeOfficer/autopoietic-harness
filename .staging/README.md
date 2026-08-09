@@ -8,4 +8,10 @@ Nothing here is live. The harness loads skills only from `.claude/skills/` and h
 - Committed, so a proposal stays applyable and auditable weeks later.
 - Deleted by the `ratify` skill when its proposal is decided, adopted or rejected.
 
+## Why this is not layered
+
+Unlike `CLAUDE.md` and `kb/`, staging is deliberately repo-wide — projects do not get their own. Layering serves things consulted contextually by nearest-wins resolution; staging is addressed explicitly by one consumer (`ratify`), by proposal id, so layering would buy nothing and would split each proposal from its artifact.
+
+Staging follows the **proposal queue**, not the proposal's target. A proposal targeting `projects/X/` still stages centrally, because the queue in `kb/improvements/` is central. Revisit only if that queue itself becomes per-project — then staging should split with it.
+
 See `kb/self-improvement.md` for the lifecycle.
