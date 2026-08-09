@@ -11,7 +11,10 @@ if [ ! -f "$repo_dir/kb/governance/constitution.md" ] && [ ! -f "$repo_dir/.auto
   exit 0
 fi
 
-prompt_file="$plugin_dir/system-prompt.md"
+prompt_file="$plugin_dir/.claude-plugin/system-prompt.md"
+if [ ! -f "$prompt_file" ]; then
+  prompt_file="$plugin_dir/system-prompt.md"
+fi
 
 if [ -f "$prompt_file" ]; then
   prompt_content="$(cat "$prompt_file")"

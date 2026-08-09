@@ -20,10 +20,10 @@ Repo-local knowledge lives in `kb/` (scaffolded via `/autopoietic-harness:init`)
 
 ## Package Layout
 
-- `.claude-plugin/` — plugin manifest (`plugin.json`), lifecycle bindings (`hooks.json`), and marketplace catalog (`marketplace.json`)
-- `hooks/` — engine lifecycle hook scripts (`session-start-prompt.sh`, `pending-proposals.sh`, `enforce-policy.sh`, `log-friction.sh`, `end-session-review.sh`)
+- `.claude-plugin/` — plugin manifest (`plugin.json`), lifecycle bindings (`hooks.json`), marketplace catalog (`marketplace.json`), and system prompt (`system-prompt.md`)
+- `hooks/` — engine lifecycle hook scripts (`session-start-prompt.sh`, `pending-proposals.sh`, `enforce-policy.sh`, `log-friction.sh`, `end-session-review.sh`, `status-check.sh`)
 - `skills/` — namespaced interactive verbs (`init`, `status`, `ratify`, `migrate`)
 - `core-kb/` — baseline governance concepts shipped with the plugin package (`constitution.md`, `self-improvement.md`, `primitive-selection.md`, `okf-format.md`, `layered-knowledge.md`)
-- `templates/` — scaffolding templates for `/init` (`CLAUDE.md.template`, `repo-kb-index.template.md`)
+- `templates/` — scaffolding templates for `/init` (`CLAUDE.md.template`, `repo-kb-index.template.md`, governance indexes)
 - `.autopoietic/` — local plugin state (friction telemetry ledger, staging quarantine, enabled flag)
 - `kb/` — local repository knowledge base (scaffolded via `/init` for dogfooding maintainer governance)
