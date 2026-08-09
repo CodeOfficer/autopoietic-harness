@@ -28,6 +28,11 @@ if tool_name.startswith("mcp__"):
     sys.exit(0)
 
 detail_str = str(d.get("tool_response") or d.get("reason") or d.get("tool_input") or "")
+
+# Ignore status probes and status check commands to prevent false friction logging
+if "status-check.sh" in detail_str or ".claude-plugin/plugin.json" in detail_str or "autopoietic-harness:status" in detail_str:
+    sys.exit(0)
+
 redacted_detail = SECRET_REGEX.sub("[REDACTED_SECRET]", detail_str)[:2000]
 
 repo_dir = sys.argv[2]

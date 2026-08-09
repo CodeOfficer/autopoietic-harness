@@ -19,20 +19,16 @@ Before showing status, check if the current repository is initialized with Autop
 
 ## Steps
 
-1. **Context & Mode Detection**:
-   - Check if `$CLAUDE_PROJECT_DIR/.claude-plugin/plugin.json` exists.
-   - If present $\rightarrow$ **Mode: `[ENGINE MAINTAINER MODE]`** (Developing the plugin itself).
-   - If absent $\rightarrow$ **Mode: `[CONSUMER REPOSITORY MODE]`** (Using the plugin in an application repo).
+1. **Execute Fast Status Check (One Silent Pass)**:
+   - Run the status check script:
+     ```bash
+     "${CLAUDE_PLUGIN_DIR:-.}"/hooks/status-check.sh
+     ```
+   - Parse the JSON response containing `is_maintainer`, `constitution_active`, `enabled`, `events_count`, `lock_active`, and `proposals_count`.
 
-2. **Collect Health & Telemetry Metrics**:
-   - Verify `kb/governance/constitution.md` and `.autopoietic/enabled`.
-   - Count events in `.autopoietic/friction/events.jsonl` and `.autopoietic/friction/events.pending.jsonl`.
-   - Check if `.autopoietic/friction/.review.lock` exists (cooldown status).
-   - Count pending items (`status: proposed`) in `kb/governance/amendments/`, `kb/improvements/`, and `.autopoietic/friction/proposals.json`.
+2. **Format Output Based on Mode**:
 
-3. **Format Output Based on Mode**:
-
-   ### A. If in CONSUMER REPOSITORY MODE:
+   ### A. If `is_maintainer` is FALSE (Project Workspace / Consumer Mode):
    Output ONLY an ultra-clean, minimal summary table:
 
    ```markdown
@@ -42,14 +38,14 @@ Before showing status, check if the current repository is initialized with Autop
    |---|---|
    | **Plugin** | ✅ Active (v1.0.0) |
    | **Constitution** | ✅ `kb/governance/constitution.md` |
-   | **Telemetry Ledger** | 📊 <count> events logged |
-   | **Synthesis Review** | 🟢 Idle / 🔒 Cooldown active |
-   | **Pending Proposals** | 📥 <count> proposals awaiting ratification |
+   | **Friction Log** | 📊 <events_count> events logged |
+   | **Automated Review** | 🟢 Idle / 🔒 Cooldown active |
+   | **Pending Proposals** | 📥 <proposals_count> proposals awaiting ratification |
    ```
 
    *Omit all maintainer mode banners, environment path tables ($CLAUDE_PLUGIN_DIR), and maintainer config debug tables.*
 
-   ### B. If in ENGINE MAINTAINER MODE:
+   ### B. If `is_maintainer` is TRUE (Plugin Engine Repository):
    Output the comprehensive Maintainer Status Dashboard:
 
    ```markdown
@@ -58,21 +54,20 @@ Before showing status, check if the current repository is initialized with Autop
    🛠️ **`[ENGINE MAINTAINER MODE]`**
 
    ## 📂 Path & Environment Diagnostics
-   - `$CLAUDE_PROJECT_DIR`: <path>
-   - `$CLAUDE_PLUGIN_DIR`: <path>
-   - `CLAUDE_PLUGIN_OPTION_PLUGIN_SOURCE_PATH`: <path>
+   - Working Directory (`$CLAUDE_PROJECT_DIR`): `<repo_dir>`
+   - Plugin Directory (`$CLAUDE_PLUGIN_DIR`): `<plugin_dir>`
 
    ## ⚡ Plugin Status & Configuration
-   - Plugin Version & Name
-   - UserConfig settings & environment overrides (`quarantine_mode`, `event_threshold`, `cooldown_minutes`)
+   - Plugin Version: `1.0.0`
+   - Active Constitution: ✅ `kb/governance/constitution.md`
 
-   ## 📊 Telemetry & Ledger Health
-   - `.autopoietic/friction/events.jsonl` event count & file sizes
-   - Secret redaction status
+   ## 📊 Friction Log & Ledger Health
+   - Un-synthesized events: `<events_count>`
+   - Secret Redaction: Active
 
-   ## ⏱️ Synthesis Review Cooldown
-   - Review lock status & lock age
+   ## ⏱️ Automated Review Status
+   - Review Lock: `<lock_active>`
 
    ## 📥 Pending Proposals Manifest
-   - Pending amendments, improvements, and staged artifacts count & list
+   - Pending proposals: `<proposals_count>`
    ```
