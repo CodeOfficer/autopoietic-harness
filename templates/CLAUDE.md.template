@@ -1,0 +1,9 @@
+# Target Repository Guidelines
+
+This repository is integrated with Autopoietic Harness (`@codeofficer/autopoietic-harness`).
+
+## Governance & Knowledge
+
+- Knowledge base concepts are located under `kb/`.
+- Active constitution is at `kb/governance/constitution.md`.
+- Pending improvements and amendments are reviewed via `/autopoietic-harness:ratify`.
