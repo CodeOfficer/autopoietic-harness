@@ -12,11 +12,53 @@ import os, json, glob, sys
 
 repo_dir = sys.argv[1]
 plugin_dir = sys.argv[2]
-source_path_raw = os.environ.get("CLAUDE_PLUGIN_OPTION_PLUGIN_SOURCE_PATH", "")
 
+# 1. 3-Tier Configuration Resolution Helper
+def resolve_config(repo_dir):
+    cfg = {
+        "enabled": True,
+        "quarantine_mode": False,
+        "plugin_source_path": "~/code/autopoietic-harness",
+        "event_threshold": 3,
+        "cooldown_minutes": 60
+    }
+    # Tier 2: Environment variables
+    if os.environ.get("CLAUDE_PLUGIN_OPTION_ENABLED") is not None:
+        cfg["enabled"] = os.environ.get("CLAUDE_PLUGIN_OPTION_ENABLED").lower() != "false"
+    if os.environ.get("CLAUDE_PLUGIN_OPTION_QUARANTINE_MODE") is not None:
+        cfg["quarantine_mode"] = os.environ.get("CLAUDE_PLUGIN_OPTION_QUARANTINE_MODE").lower() == "true"
+    if os.environ.get("CLAUDE_PLUGIN_OPTION_PLUGIN_SOURCE_PATH"):
+        cfg["plugin_source_path"] = os.environ.get("CLAUDE_PLUGIN_OPTION_PLUGIN_SOURCE_PATH")
+    if os.environ.get("CLAUDE_PLUGIN_OPTION_EVENT_THRESHOLD"):
+        try: cfg["event_threshold"] = int(os.environ.get("CLAUDE_PLUGIN_OPTION_EVENT_THRESHOLD"))
+        except: pass
+    if os.environ.get("CLAUDE_PLUGIN_OPTION_COOLDOWN_MINUTES"):
+        try: cfg["cooldown_minutes"] = int(os.environ.get("CLAUDE_PLUGIN_OPTION_COOLDOWN_MINUTES"))
+        except: pass
+
+    # Tier 1: Local repo config override (.autopoietic/config.json)
+    local_cfg_file = os.path.join(repo_dir, ".autopoietic", "config.json")
+    if os.path.isfile(local_cfg_file):
+        try:
+            with open(local_cfg_file) as f:
+                local_data = json.load(f)
+                cfg.update(local_data)
+        except Exception:
+            pass
+
+    return cfg
+
+cfg = resolve_config(repo_dir)
+
+if not cfg["enabled"] or os.environ.get("AUTOPOIETICO_DISABLED") == "1":
+    print(json.dumps({"enabled": False}))
+    sys.exit(0)
+
+# 2. Maintainer Mode Detection
 is_maintainer = False
 try:
     current_repo_path = os.path.realpath(repo_dir)
+    source_path_raw = cfg["plugin_source_path"]
     if source_path_raw:
         configured_source_path = os.path.realpath(os.path.expanduser(source_path_raw))
         if current_repo_path == configured_source_path:
@@ -52,14 +94,17 @@ for pattern in ["kb/improvements/proposal-*.md", "kb/governance/amendments/sessi
 out = {
     "is_maintainer": is_maintainer,
     "constitution_active": constitution_active,
-    "enabled": enabled_flag,
+    "enabled": True,
     "events_count": events_count,
+    "event_threshold": cfg["event_threshold"],
+    "cooldown_minutes": cfg["cooldown_minutes"],
+    "quarantine_mode": cfg["quarantine_mode"],
     "lock_active": lock_active,
     "proposals_count": proposals_count,
     "repo_dir": repo_dir,
     "plugin_dir": plugin_dir
 }
 print(json.dumps(out))
-' "$repo_dir" "$plugin_dir" 2>/dev/null || echo '{"is_maintainer": false, "constitution_active": false, "enabled": false, "events_count": 0, "lock_active": false, "proposals_count": 0}'
+' "$repo_dir" "$plugin_dir" 2>/dev/null || echo '{"is_maintainer": false, "constitution_active": false, "enabled": true, "events_count": 0, "event_threshold": 3, "cooldown_minutes": 60, "quarantine_mode": false, "lock_active": false, "proposals_count": 0}'
 
 exit 0

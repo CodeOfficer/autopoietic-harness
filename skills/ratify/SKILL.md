@@ -7,18 +7,20 @@ description: Owner-invoked promotion verb — use when the owner asks to ratify,
 
 ## Purpose
 
-Apply the owner's decision on pending proposals: promote staged artifacts into the live harness (either locally in the target repository or upstream to the maintainer source directory), or reject with a recorded rationale. This is the only path from `status: proposed` to a live mechanism (constitution Articles 1, 5, 7).
+Apply the owner's decision on pending proposals: promote staged artifacts into the live harness (either locally in the target repository or upstream to the maintainer source directory), or reject with a recorded rationale. This is the only path from `status: proposed` to a live mechanism (constitution Articles 1, 5, 7, 8).
 
 ## Inputs
 
 - Pending items: files with `status: proposed` listed in `kb/improvements/index.md`, `kb/governance/amendments/index.md`, or `.autopoietic/friction/proposals.json`.
-- Their staged artifacts, if any, under `.autopoietic/staging/<proposal-id>/`.
+- Their staged artifacts, if any, under `.autopoietic/staging/<proposal-id>/` (or `~/.autopoietic/staging/<repo-id>/<proposal-id>/` when `quarantine_mode=true`).
 - Plugin environment options: `CLAUDE_PLUGIN_OPTION_PLUGIN_SOURCE_PATH` (default `~/code/autopoietic-harness`).
 - The lifecycle rules in `core-kb/self-improvement.md`.
 
 ## Initialization Guard (Prerequisite)
 
-Before running ratify, check if the current repository is initialized with Autopoietic Harness:
+Before running ratify, check if the plugin is enabled and initialized:
+- Check if `CLAUDE_PLUGIN_OPTION_ENABLED=false` or `AUTOPOIETICO_DISABLED=1`. If disabled, stop and inform the owner:
+  > ⚠️ **Autopoietic Harness is disabled via configuration.**
 - Verify that `kb/governance/constitution.md`, `.autopoietic/enabled`, or `.claude-plugin/plugin.json` exists in the working repository root (`$CLAUDE_PROJECT_DIR`).
 - **If NOT initialized**: Stop immediately and tell the owner:
   > ⚠️ **Autopoietic Harness is not initialized in this repository.**  
@@ -26,7 +28,7 @@ Before running ratify, check if the current repository is initialized with Autop
 
 ## Steps
 
-1. Find every pending item (`status: proposed` in the two indexes or `.autopoietic/friction/proposals.json`).
+1. Find every pending item (`status: proposed` in the two indexes or `.autopoietic/friction/proposals.json`). Check staged artifacts under `.autopoietic/staging/<proposal-id>/` (or `~/.autopoietic/staging/<repo-id>/<proposal-id>/` when `quarantine_mode=true`).
 2. **Manifest before any vote.** Output one chat message containing a card for EVERY pending item, in this exact shape:
 
    - Header: `📌 Item N: <Title>` — always starting with the 📌 emoji.

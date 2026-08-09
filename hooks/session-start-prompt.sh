@@ -4,7 +4,7 @@ if [ "${AUTOPOIETICO_DISABLED:-0}" = "1" ] || [ "${CLAUDE_PLUGIN_OPTION_ENABLED:
 fi
 
 repo_dir="${CLAUDE_PROJECT_DIR:-$(pwd)}"
-plugin_dir="${CLAUDE_PLUGIN_DIR:-$(cd "$(dirname "$0")/.." && pwd)}"
+plugin_dir="${CLAUDE_PLUGIN_DIR:-${CLAUDE_PLUGIN_OPTION_PLUGIN_SOURCE_PATH:-$(cd "$(dirname "$0")/.." && pwd)}}"
 
 # Opt-in check: Active only if target repo was initialized via /init (has kb/governance/constitution.md or .autopoietic/enabled) or is the plugin engine itself
 if [ ! -f "$repo_dir/kb/governance/constitution.md" ] && [ ! -f "$repo_dir/.autopoietic/enabled" ] && [ ! -f "$repo_dir/.claude-plugin/plugin.json" ]; then
