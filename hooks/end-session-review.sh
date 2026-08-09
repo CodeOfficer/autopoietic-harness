@@ -22,6 +22,14 @@ pending_file="$friction_dir/events.pending.jsonl"
 cooldown_mins="${CLAUDE_PLUGIN_OPTION_COOLDOWN_MINUTES:-60}"
 event_threshold="${CLAUDE_PLUGIN_OPTION_EVENT_THRESHOLD:-3}"
 
+# Quarantine Mode: Global ~/.autopoietic/staging vs Local .autopoietic/staging
+if [ "${CLAUDE_PLUGIN_OPTION_QUARANTINE_MODE:-false}" = "true" ]; then
+  repo_slug="$(basename "$repo_dir")"
+  staging_dir="$HOME/.autopoietic/staging/$repo_slug"
+else
+  staging_dir="$repo_dir/.autopoietic/staging"
+fi
+
 # 1. Configurable Cooldown Lock Check
 if [ -d "$lock" ]; then
   if [ -n "$(find "$lock" -maxdepth 0 -mmin +"$cooldown_mins" 2>/dev/null)" ]; then
@@ -48,7 +56,7 @@ if [ "$count" -lt "$event_threshold" ]; then
 fi
 
 # Acquire lock
-mkdir -p "$friction_dir"
+mkdir -p "$friction_dir" "$staging_dir"
 mkdir "$lock" 2>/dev/null || exit 0
 
 # Rotate events into pending
@@ -61,7 +69,7 @@ prompt="You are the automated end-session reviewer. Perform BOTH duties in this 
 
 1) Governance review, following $plugin_dir/core-kb/constitution.md and amendments: read kb/governance/constitution.md and every file in kb/governance/amendments/. If gaps or contradictions warrant it, write ONE file kb/governance/amendments/session-${today}.md (append -2, -3, ... if that name exists) with OKF frontmatter per core-kb/okf-format.md and status: proposed, and add it to the index there.
 
-2) Friction synthesis, following core-kb/self-improvement.md: read .autopoietic/friction/events.pending.jsonl if it exists. Cluster recurring events by root cause. For each root cause, choose the cheapest fitting primitive per core-kb/primitive-selection.md and write kb/improvements/proposal-${today}-<slug>.md (status: proposed) stating the primitive, why cheaper ones don't suffice, the target tier (consumer-repo local or global plugin engine), and acceptance criteria. Materialize any executable artifact under .autopoietic/staging/<proposal-id>/. Add each proposal to kb/improvements/index.md.
+2) Friction synthesis, following core-kb/self-improvement.md: read .autopoietic/friction/events.pending.jsonl if it exists. Cluster recurring events by root cause. For each root cause, choose the cheapest fitting primitive per core-kb/primitive-selection.md and write kb/improvements/proposal-${today}-<slug>.md (status: proposed) stating the primitive, why cheaper ones don't suffice, the target tier (consumer-repo local or global plugin engine), and acceptance criteria. Materialize any executable artifact under $staging_dir/<proposal-id>/. Add each proposal to kb/improvements/index.md.
 
 The ledger logs ONLY failures, so it cannot show that a later attempt succeeded. Before proposing anything from it, apply all three rules in core-kb/self-improvement.md stage 2: (a) iteration is not friction — repeated failures converging on a goal are the cost of the work; a pattern requires independent sessions, separated in time, doing unrelated work; (b) observation, not diagnosis — you have no shell and cannot verify why anything failed, so state the observed pattern and say the cause is unverified, never assert a root cause; (c) half-life test — a fact that would not survive a container rebuild is volatile state, not knowledge, and earns no kb entry at any tier; never propose anything that tells agents to stop checking something. When these rules leave nothing worth proposing, write nothing and say why.
 
@@ -71,7 +79,7 @@ Per constitution Article 4: for either duty, if nothing new emerged, write nothi
 setsid bash -c '
   cd "$1" || exit 1
   deny="Bash"
-  allow="Read,Glob,Grep,Edit(kb/governance/amendments/**),Edit(kb/improvements/**),Edit(.autopoietic/staging/**)"
+  allow="Read,Glob,Grep,Edit(kb/governance/amendments/**),Edit(kb/improvements/**),Edit($6/**)"
   {
     echo "=== $(date -Is) end-session review starting"
     echo "--- effective grant: --model claude-sonnet-5 --disallowedTools $deny --allowedTools $allow"
@@ -84,6 +92,6 @@ setsid bash -c '
     echo "=== $(date -Is) end-session review finished (exit $rc)"
   } > "$3" 2>&1
   rmdir "$4" 2>/dev/null
-' _ "$repo_dir" "$prompt" "$log" "$lock" "$pending_file" < /dev/null > /dev/null 2>&1 &
+' _ "$repo_dir" "$prompt" "$log" "$lock" "$pending_file" "$staging_dir" < /dev/null > /dev/null 2>&1 &
 
 exit 0
