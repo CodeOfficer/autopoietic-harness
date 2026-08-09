@@ -41,6 +41,7 @@ setsid bash -c '
     echo "=== $(date -Is) end-session review starting"
     GOVERNANCE_REVIEW_HOOK=1 claude -p "$2" \
       --model claude-sonnet-5 \
+      --disallowedTools "Bash" \
       --allowedTools "Read,Glob,Grep,Edit(kb/governance/amendments/**),Edit(kb/improvements/**),Edit(.claude/staging/**)"
     rc=$?
     [ "$rc" -eq 0 ] && rm -f "$5"
