@@ -2,3 +2,5 @@
 .claude/hooks/*.log
 .claude/hooks/.review.lock/
 .claude/friction/
+.staging/
+

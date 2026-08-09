@@ -18,13 +18,14 @@ Generalize the adopted governance loop (observe → synthesize → propose → r
 1. **Observation:** `PostToolUseFailure` and `PermissionDenied` hooks append events to the gitignored ledger `.claude/friction/events.jsonl`; working agents append one-line friction notes to the same ledger.
 2. **Synthesis:** the single existing SessionEnd headless review also reads the ledger, clusters recurring events by root cause, and writes proposals here with acceptance criteria (Art. 6).
 3. **Primitive selection:** per the rubric in `kb/primitive-selection.md` — cheapest primitive that kills the root cause.
-4. **Containment & promotion:** artifacts are quarantined in `.claude/staging/` (inert by construction); the owner promotes or rejects via the `ratify` skill. Tier ladder: session ledger → project-local layer → repo baseline, where root promotion requires the pattern ratified in ≥2 projects or a stated project-agnostic argument.
+4. **Containment & promotion:** artifacts are quarantined in `.staging/` (inert by construction); the owner promotes or rejects via the `ratify` skill. Tier ladder: session ledger → consumer repo layer → global plugin engine baseline (`$CLAUDE_PLUGIN_OPTION_PLUGIN_SOURCE_PATH`).
 
 ## Owner-decided parameters
 
 - One combined reviewer run (governance + friction synthesis).
-- Staging location: `.claude/staging/`.
-- Tier-2 graduation threshold: ratified in ≥2 projects.
+- Staging location: `.staging/`.
+- Maintainer Upstream Promotion Mode via `/autopoietic-harness:ratify`.
+
 
 ## Ratification (2026-08-09)
 

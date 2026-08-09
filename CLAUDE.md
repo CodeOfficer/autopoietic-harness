@@ -19,9 +19,11 @@ Knowledge lives in layered `kb/` directories (Open Knowledge Format — see `kb/
 
 ## Layout
 
-- `kb/` — repository-wide knowledge base
-- `kb/governance/` — AI-governance constitution and proposed amendments
-- `kb/improvements/` — friction-driven improvement proposals
-- `projects/` — individual projects (see `projects/CLAUDE.md`)
-- `.claude/skills/` — agent skills
-- `.staging/` — inert quarantine for artifacts of pending proposals (see `.staging/README.md`)
+- `core-kb/` — baseline governance and OKF concepts shipped with the plugin
+- `hooks/` — engine lifecycle hook scripts
+- `skills/` — namespaced interactive verbs (`ratify`, `init`, `status`, `migrate`)
+- `templates/` — scaffolding templates for `/init`
+- `.claude-plugin/` — plugin manifest (`plugin.json`) and lifecycle bindings (`hooks.json`)
+- `kb/` — repository governance and local knowledge base
+- `.staging/` — inert quarantine for artifacts of pending proposals
+
