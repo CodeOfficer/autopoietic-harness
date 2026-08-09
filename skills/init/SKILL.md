@@ -20,11 +20,12 @@ Initialize a target project repository with the Autopoietic Harness structure, s
    - `.autopoietic/enabled` (Opt-in flag enabling plugin hooks for this repository)
    - `.autopoietic/friction/` (Friction ledger directory)
    - `.autopoietic/staging/` (Inert quarantine for unratified proposal artifacts)
-3. Copy starter templates from plugin directory (`$CLAUDE_PLUGIN_DIR/templates/`):
+3. Copy starter templates from plugin directory (`$CLAUDE_PLUGIN_DIR/templates/` and `$CLAUDE_PLUGIN_DIR/core-kb/`):
    - `kb/governance/constitution.md` (from `$CLAUDE_PLUGIN_DIR/core-kb/constitution.md`)
    - `kb/index.md` (from `$CLAUDE_PLUGIN_DIR/templates/repo-kb-index.template.md`)
-   - `kb/governance/index.md`
-   - `kb/improvements/index.md`
+   - `kb/governance/index.md` (from `$CLAUDE_PLUGIN_DIR/templates/governance-index.template.md`)
+   - `kb/governance/amendments/index.md` (from `$CLAUDE_PLUGIN_DIR/templates/amendments-index.template.md`)
+   - `kb/improvements/index.md` (from `$CLAUDE_PLUGIN_DIR/templates/improvements-index.template.md`)
    - `CLAUDE.md` (merge or create using `$CLAUDE_PLUGIN_DIR/templates/CLAUDE.md.template`)
 4. Ensure `.gitignore` in the target repository includes:
    - `.autopoietic/`

@@ -1,26 +1,23 @@
 ---
-id: kb-index
+id: kb-root-index
 title: Repository Knowledge Base
-description: Discovery index for repository-wide knowledge
-tags: [index]
+description: Local knowledge base index for this repository
+tags: [knowledge, index]
 status: adopted
-updated: 2026-08-08
+updated: 2026-08-09
 owner: codeofficer
-related: []
+related: [kb-gov-index]
 ---
 
 # Repository Knowledge Base
 
-Repository-wide knowledge. More-local `kb/` directories (e.g. inside a project) supplement and, when relevant, override what is here.
+Welcome to the local knowledge base.
 
-## Concepts
+## Knowledge Sub-Bases
 
-- [okf-format.md](okf-format.md) — the Open Knowledge Format used by every `kb/` in this repo
-- [layered-knowledge.md](layered-knowledge.md) — how layered `kb/` directories resolve
-- [self-improvement.md](self-improvement.md) — how observed friction becomes ratified harness improvements
-- [primitive-selection.md](primitive-selection.md) — rubric for choosing the mechanism that fixes a root cause
+- [Governance](governance/index.md) — Local constitution and ratified amendments.
+- [Improvements](improvements/index.md) — Local self-improvement proposals and tracking.
 
-## Sub-bases
+## Conventions
 
-- [governance/](governance/index.md) — AI-governance constitution and proposed amendments
-- [improvements/](improvements/index.md) — friction-driven improvement proposals awaiting owner review
+Knowledge base entries follow the Open Knowledge Format (OKF).

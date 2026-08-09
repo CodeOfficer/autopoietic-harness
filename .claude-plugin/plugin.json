@@ -16,7 +16,7 @@
     "quarantine_mode": {
       "title": "Quarantine Mode",
       "type": "boolean",
-      "description": "Stage proposals in global ~/.claude/autopoietic/staging instead of repo .staging/ (true/false)",
+      "description": "Stage proposals in global ~/.autopoietic/staging/ instead of repo .autopoietic/staging/ (true/false)",
       "default": false
     },
     "plugin_source_path": {

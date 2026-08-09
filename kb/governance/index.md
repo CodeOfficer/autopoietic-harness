@@ -1,22 +1,21 @@
 ---
 id: kb-gov-index
 title: Governance Knowledge Base
-description: Discovery index for the AI-governance constitution and its amendments
+description: Discovery index for the local constitution and its amendments
 tags: [index, governance]
 status: adopted
-updated: 2026-08-08
+updated: 2026-08-09
 owner: codeofficer
-related: [kb-index]
+related: [kb-root-index]
 ---
 
 # Governance Knowledge Base
 
-Outputs of the constitutional convention (see the `governance-convention` skill). Applies repository-wide.
+Local governance knowledge for this repository. Applies repository-wide.
 
 ## Concepts
 
-- [constitution.md](constitution.md) — the current constitutional laws for safe, accountable AI development
-- [end-session-review.md](end-session-review.md) — how the SessionEnd hook auto-runs the convention's review
+- [constitution.md](constitution.md) — the active constitutional laws for safe, accountable AI development
 
 ## Sub-bases
 
