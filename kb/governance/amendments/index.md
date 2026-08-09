@@ -4,7 +4,7 @@ title: Proposed Amendments
 description: Convention session outputs awaiting owner review
 tags: [index, governance, amendments]
 status: adopted
-updated: 2026-08-08
+updated: 2026-08-09
 owner: codeofficer
 related: [kb-gov-constitution]
 ---
@@ -19,3 +19,10 @@ Proposals are **never applied automatically**. After owner review, ratified chan
 
 - [session-2026-08-08.md](session-2026-08-08.md) — first session: gap review of the seed constitution; four proposed amendments, two dissents — **adopted**
 - [session-2026-08-08-2.md](session-2026-08-08-2.md) — end-session review: convention self-consistency fixes, ratification-record amendment, two dissents — **adopted**
+- [session-2026-08-09.md](session-2026-08-09.md) — end-session review: Article 7 telemetry-boundary amendment (self-improvement lifecycle), three carryover gaps formalized, two dissents — **proposed**
+
+## Carryover gaps
+
+Gaps raised in an end-session review but not yet formalized into a proposal. Cleared when a later session turns the item into a proposed amendment/improvement (moved out of this list) or the owner rejects it outright.
+
+- (none currently outstanding — session-2026-08-09 formalized all three gaps open since session-2026-08-08)
