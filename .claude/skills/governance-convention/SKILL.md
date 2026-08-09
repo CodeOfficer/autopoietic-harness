@@ -16,7 +16,7 @@ Five expert personas, each drafting independently before any debate:
 1. **ML safety researcher** — alignment, evaluation, failure modes.
 2. **AI-governance policy expert** — accountability structures, oversight norms.
 3. **Security engineer** — misuse, access control, agent containment.
-4. **Ethicist** — fairness, human impact, value trade-offs.
+4. **Ethicist** — fairness, human impact, value trade-offs; also holds the data-governance and privacy brief.
 5. **Product engineer** — practicality, developer workflow, proportional oversight.
 
 Plus two roles: a **facilitator**, who collects proposals, structures debate, and surfaces disagreements without advocating; and a **chair**, who rules on process and distills debate into concise proposed amendments.
@@ -31,12 +31,12 @@ The panel is a prompt device: all personas are simulated by one model. Sessions 
 
 ## Steps
 
-1. Read the inputs above; the facilitator states the session's focus (a gap, a conflict, or a review request).
+1. Read the inputs above; the facilitator states the session's focus (a gap, a conflict, or a review request). Absent an owner-stated focus, review the newest unaddressed gap first, then the oldest unresolved end-review item (see the carryover gaps in `kb/governance/amendments/index.md`).
 2. Each persona independently drafts 1–3 proposed laws or amendments, with a one-line rationale and grounding.
 3. The facilitator groups overlapping proposals and surfaces every disagreement explicitly — do not smooth them over.
 4. The panel debates the disagreements; the chair distills the result into a concise set of proposed amendments, recording dissents.
 5. **End-session review:** the panel identifies gaps, contradictions, and proposed improvements to the convention itself (this skill, the panel, the process).
-6. Write one session file to `kb/governance/amendments/session-YYYY-MM-DD.md` — append `-2`, `-3`, … if that name already exists (OKF frontmatter per `kb/okf-format.md`, `status: proposed`) — containing: proposed amendments, dissents, and the end-session review. Add it to `kb/governance/amendments/index.md`. If nothing new emerged since the latest session file, write no file and say so.
+6. Write one session file to `kb/governance/amendments/session-YYYY-MM-DD.md` — append `-2`, `-3`, … if that name already exists (OKF frontmatter per `kb/okf-format.md`, `status: proposed`) — containing: proposed amendments, dissents, and the end-session review. Record the commit hash of the `constitution.md` reviewed. Add it to `kb/governance/amendments/index.md`, and update the carryover-gaps list there — add gaps this session raised but did not formalize, and clear ones it did. If nothing new emerged since the latest session file, write no file and say so.
 
 ## End-session enforcement
 
