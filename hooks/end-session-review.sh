@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-if [ "${AUTOPOIETICO_DISABLED:-0}" = "1" ] || [ "${CLAUDE_PLUGIN_OPTION_ENABLED:-true}" = "false" ]; then
+if [ "${AUTOPOIETICO_DISABLED:-0}" = "1" ] || [ "${AUTOPOIETICO_ENABLED:-true}" = "false" ] || [ "${CLAUDE_PLUGIN_OPTION_ENABLED:-true}" = "false" ]; then
   exit 0
 fi
 
 [ -n "${GOVERNANCE_REVIEW_HOOK:-}" ] && exit 0
 
 repo_dir="${CLAUDE_PROJECT_DIR:-$(pwd)}"
-plugin_dir="${CLAUDE_PLUGIN_DIR:-$(cd "$(dirname "$0")/.." && pwd)}"
+plugin_dir="${CLAUDE_PLUGIN_DIR:-${AUTOPOIETICO_PLUGIN_SOURCE_PATH:-${CLAUDE_PLUGIN_OPTION_PLUGIN_SOURCE_PATH:-$(cd "$(dirname "$0")/.." && pwd)}}}"
 
 # Opt-in check: Active only if target repo was initialized via /init (has kb/governance/constitution.md or .autopoietic/enabled) or is the plugin engine itself
 if [ ! -f "$repo_dir/kb/governance/constitution.md" ] && [ ! -f "$repo_dir/.autopoietic/enabled" ] && [ ! -f "$repo_dir/.claude-plugin/plugin.json" ]; then
@@ -19,11 +19,13 @@ log="$friction_dir/end-session-review.log"
 events_file="$friction_dir/events.jsonl"
 pending_file="$friction_dir/events.pending.jsonl"
 
-cooldown_mins="${CLAUDE_PLUGIN_OPTION_COOLDOWN_MINUTES:-60}"
-event_threshold="${CLAUDE_PLUGIN_OPTION_EVENT_THRESHOLD:-3}"
+cooldown_mins="${AUTOPOIETICO_COOLDOWN_MINUTES:-${CLAUDE_PLUGIN_OPTION_COOLDOWN_MINUTES:-60}}"
+event_threshold="${AUTOPOIETICO_EVENT_THRESHOLD:-${CLAUDE_PLUGIN_OPTION_EVENT_THRESHOLD:-3}}"
+
+quarantine_flag="${AUTOPOIETICO_QUARANTINE_MODE:-${CLAUDE_PLUGIN_OPTION_QUARANTINE_MODE:-false}}"
 
 # Quarantine Mode: Global ~/.autopoietic/staging vs Local .autopoietic/staging
-if [ "${CLAUDE_PLUGIN_OPTION_QUARANTINE_MODE:-false}" = "true" ]; then
+if [ "$quarantine_flag" = "true" ]; then
   repo_id=$(python3 -c '
 import subprocess, hashlib, os, sys
 cwd = sys.argv[1]

@@ -35,7 +35,7 @@ To activate Autopoietic Harness in a project repository:
    ```
 
 ### What `/init` Creates in Your Repository:
-- `kb/governance/constitution.md` — The active 7 Constitutional Laws.
+- `kb/governance/constitution.md` — The active 8 Constitutional Laws.
 - `kb/index.md` — Local knowledge base index.
 - `CLAUDE.md` — Project governance rules.
 - `.autopoietic/` — Plugin state directory containing `.autopoietic/enabled`, `.autopoietic/friction/`, `.autopoietic/staging/`.
@@ -43,13 +43,63 @@ To activate Autopoietic Harness in a project repository:
 
 ---
 
-## 3. Daily Usage
+## 3. ⚙️ Configuration Guide
+
+Autopoietic Harness can be configured globally via Claude Code, per session via environment variables, or per project via local configuration files.
+
+### Configuration Resolution Hierarchy (Order of Precedence)
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│ 1. Project Local Overrides (.autopoietic/config.json) [Highest]        │
+├────────────────────────────────────────────────────────────────────────┤
+│ 2. Namespaced Environment Variables (AUTOPOIETICO_<KEY>) [Medium]       │
+├────────────────────────────────────────────────────────────────────────┤
+│ 3. Plugin Manifest Defaults (.claude-plugin/plugin.json) [Default]     │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Method 1: Project Local Override (`.autopoietic/config.json`) — *Highest Priority*
+Create `.autopoietic/config.json` inside your project root to customize thresholds specifically for that repository:
+```json
+{
+  "event_threshold": 5,
+  "cooldown_minutes": 30
+}
+```
+
+#### Method 2: Namespaced Environment Variables (`AUTOPOIETICO_<KEY>`) — *Medium Priority*
+Set environment variables in your terminal or `.bashrc`:
+- `AUTOPOIETICO_ENABLED=true|false` — Master kill switch
+- `AUTOPOIETICO_QUARANTINE_MODE=true|false` — Stage proposals in `~/.autopoietic/staging/` to keep project working tree clean
+- `AUTOPOIETICO_EVENT_THRESHOLD=5` — Telemetry failure count required to trigger automated review
+- `AUTOPOIETICO_COOLDOWN_MINUTES=30` — Cooldown period between automated reviews
+- `AUTOPOIETICO_PLUGIN_SOURCE_PATH=~/code/autopoietic-harness` — Path to plugin engine repo for Maintainer Mode
+
+*Note: Environment variables set by Claude Code (`CLAUDE_PLUGIN_OPTION_<KEY>`) are also supported automatically.*
+
+#### Method 3: Claude Code Global Plugin Options
+Run `/plugin configure autopoietic-harness` inside Claude Code to set global user options interactively.
+
+### Configuration Options Reference
+
+| Option | Type | Default | Environment Variable | Description |
+|---|---|---|---|---|
+| `enabled` | `boolean` | `true` | `AUTOPOIETICO_ENABLED` | Master kill switch (true/false) |
+| `quarantine_mode` | `boolean` | `false` | `AUTOPOIETICO_QUARANTINE_MODE` | Stage proposals in `~/.autopoietic/staging/` instead of repo `.autopoietic/staging/` |
+| `plugin_source_path` | `directory` | `~/code/autopoietic-harness` | `AUTOPOIETICO_PLUGIN_SOURCE_PATH` | Path to autopoietic-harness plugin engine repository |
+| `event_threshold` | `integer` | `3` | `AUTOPOIETICO_EVENT_THRESHOLD` | Minimum un-synthesized friction events before automated review triggers |
+| `cooldown_minutes` | `integer` | `60` | `AUTOPOIETICO_COOLDOWN_MINUTES` | Cooldown period (in minutes) between automated reviews |
+
+---
+
+## 4. Daily Usage
 
 ### Check Harness Health & Telemetry
 ```slash
 /autopoietic-harness:status
 ```
-Displays active plugin version, recorded friction events count, synthesis review status, and pending proposals.
+Displays active plugin version, recorded friction events count, threshold progress (`1 / 3 events`), review cooldown status, and pending proposals.
 
 ### Ratify & Adopt Self-Improvements
 When recurring friction occurs, automated background synthesis creates proposal cards. To review and adopt fixes:
@@ -67,22 +117,35 @@ When recurring friction occurs, automated background synthesis creates proposal 
 
 The plugin enforces a strict boundary between **Engine** (shipped code) and **State** (project data):
 
-- **The Plugin (Engine)**: Lives in this repository. Contains `.claude-plugin/`, `hooks/`, `skills/`, `core-kb/`, `templates/`, and `system-prompt.md`.
-- **The Repository (State)**: Lives in the consumer's repo. Contains `kb/`, `.staging/`, and `.claude/friction/`.
+- **The Plugin (Engine)**: Lives in this repository. Contains `.claude-plugin/`, `hooks/`, `skills/`, `core-kb/`, `templates/`, and `.claude-plugin/system-prompt.md`.
+- **The Repository (State)**: Lives in the consumer's repo. Contains `kb/`, `.autopoietic/staging/`, and `.autopoietic/friction/`.
 
 ---
 
-## 2. Target Layout
+## 2. Dogfooding (Plugin Consuming Itself)
+
+When developing the plugin engine itself inside this repository:
+- Run `/autopoietic-harness:init` to scaffold maintainer governance.
+- `plugin_source_path` automatically resolves to `$CLAUDE_PROJECT_DIR` without requiring manual configuration.
+- Local maintainer thresholds can be customized via `.autopoietic/config.json`.
+
+---
+
+## 3. Target Layout
 
 ```
 .claude-plugin/
 ├── plugin.json                 # Manifest: name, version, userConfig parameters
-└── hooks.json                  # Event bindings (SessionStart, PostToolUseFailure, PermissionDenied, SessionEnd)
+├── hooks.json                  # Event bindings
+├── marketplace.json            # Marketplace catalog entry
+└── system-prompt.md            # XML-fenced prompt injection (<30 tokens)
 hooks/                          # Executable Hook Scripts
-├── session-start-prompt.sh     # XML-fenced prompt injection (<30 tokens)
+├── session-start-prompt.sh     # SessionStart prompt injection
 ├── log-friction.sh             # Telemetry logger (secret redaction, mcp__* payload filter)
 ├── end-session-review.sh       # Debounced background review (cooldown + threshold guards)
-└── pending-proposals.sh        # Pending proposal notice at session start
+├── pending-proposals.sh        # Pending proposal notice at session start
+├── enforce-policy.sh           # PreToolUse deterministic policy enforcer
+└── status-check.sh             # Dynamic 3-tier config & health status check (<0.02s)
 skills/                         # Interactive Verbs
 ├── ratify/                     # Interactive ratification & Maintainer Upstream Mode
 ├── status/                     # Harness health & status dashboard
@@ -94,29 +157,6 @@ templates/                      # Scaffolding templates used by /init
 
 ---
 
-## 3. Configuration Flags (`userConfig`)
-
-Configurable via `.claude-plugin/plugin.json` or environment variables:
-
-| Option | Environment Variable | Default | Description |
-|---|---|---|---|
-| `enabled` | `CLAUDE_PLUGIN_OPTION_ENABLED` | `true` | Master kill switch |
-| `quarantine_mode` | `CLAUDE_PLUGIN_OPTION_QUARANTINE_MODE` | `false` | Global staging directory |
-| `plugin_source_path` | `CLAUDE_PLUGIN_OPTION_PLUGIN_SOURCE_PATH` | `~/code/autopoietic-harness` | Path to upstream plugin repo for Maintainer Mode |
-| `event_threshold` | `CLAUDE_PLUGIN_OPTION_EVENT_THRESHOLD` | `3` | Minimum un-synthesized friction events before review triggers |
-| `cooldown_minutes` | `CLAUDE_PLUGIN_OPTION_COOLDOWN_MINUTES` | `60` | Cooldown period between synthesis runs |
-
----
-
-## 5. Documentation & Test Suites
+## 4. Documentation & Test Suites
 
 - **[docs/EXAMPLE-PROMPTS.md](docs/EXAMPLE-PROMPTS.md)**: Realistic example prompts and test suites for Consumer & Maintainer workflows.
-
----
-
-## 4. Upstream Maintainer Mode Promotion
-
-When testing self-improvement in consumer repositories, plugin maintainers can graduate verified fixes upstream:
-1. Run `/autopoietic-harness:ratify` in the consumer repository.
-2. Choose **Option B: Promote Upstream (Maintainer Mode)**.
-3. Staged artifacts will copy directly into `$CLAUDE_PLUGIN_OPTION_PLUGIN_SOURCE_PATH` for global plugin updates.
