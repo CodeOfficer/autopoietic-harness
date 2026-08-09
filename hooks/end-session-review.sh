@@ -8,12 +8,12 @@ fi
 repo_dir="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 plugin_dir="${CLAUDE_PLUGIN_DIR:-$(cd "$(dirname "$0")/.." && pwd)}"
 
-# Opt-in check: Active only if target repo was initialized via /init (has kb/governance/constitution.md or .claude/autopoietic-enabled) or is the plugin engine itself
-if [ ! -f "$repo_dir/kb/governance/constitution.md" ] && [ ! -f "$repo_dir/.claude/autopoietic-enabled" ] && [ ! -f "$repo_dir/.claude-plugin/plugin.json" ]; then
+# Opt-in check: Active only if target repo was initialized via /init (has kb/governance/constitution.md or .autopoietic/enabled) or is the plugin engine itself
+if [ ! -f "$repo_dir/kb/governance/constitution.md" ] && [ ! -f "$repo_dir/.autopoietic/enabled" ] && [ ! -f "$repo_dir/.claude-plugin/plugin.json" ]; then
   exit 0
 fi
 
-friction_dir="$repo_dir/.claude/friction"
+friction_dir="$repo_dir/.autopoietic/friction"
 lock="$friction_dir/.review.lock"
 log="$friction_dir/end-session-review.log"
 events_file="$friction_dir/events.jsonl"
@@ -61,7 +61,7 @@ prompt="You are the automated end-session reviewer. Perform BOTH duties in this 
 
 1) Governance review, following $plugin_dir/core-kb/constitution.md and amendments: read kb/governance/constitution.md and every file in kb/governance/amendments/. If gaps or contradictions warrant it, write ONE file kb/governance/amendments/session-${today}.md (append -2, -3, ... if that name exists) with OKF frontmatter per core-kb/okf-format.md and status: proposed, and add it to the index there.
 
-2) Friction synthesis, following core-kb/self-improvement.md: read .claude/friction/events.pending.jsonl if it exists. Cluster recurring events by root cause. For each root cause, choose the cheapest fitting primitive per core-kb/primitive-selection.md and write kb/improvements/proposal-${today}-<slug>.md (status: proposed) stating the primitive, why cheaper ones don't suffice, the target tier (consumer-repo local or global plugin engine), and acceptance criteria. Materialize any executable artifact under .staging/<proposal-id>/. Add each proposal to kb/improvements/index.md.
+2) Friction synthesis, following core-kb/self-improvement.md: read .autopoietic/friction/events.pending.jsonl if it exists. Cluster recurring events by root cause. For each root cause, choose the cheapest fitting primitive per core-kb/primitive-selection.md and write kb/improvements/proposal-${today}-<slug>.md (status: proposed) stating the primitive, why cheaper ones don't suffice, the target tier (consumer-repo local or global plugin engine), and acceptance criteria. Materialize any executable artifact under .autopoietic/staging/<proposal-id>/. Add each proposal to kb/improvements/index.md.
 
 The ledger logs ONLY failures, so it cannot show that a later attempt succeeded. Before proposing anything from it, apply all three rules in core-kb/self-improvement.md stage 2: (a) iteration is not friction — repeated failures converging on a goal are the cost of the work; a pattern requires independent sessions, separated in time, doing unrelated work; (b) observation, not diagnosis — you have no shell and cannot verify why anything failed, so state the observed pattern and say the cause is unverified, never assert a root cause; (c) half-life test — a fact that would not survive a container rebuild is volatile state, not knowledge, and earns no kb entry at any tier; never propose anything that tells agents to stop checking something. When these rules leave nothing worth proposing, write nothing and say why.
 
@@ -71,7 +71,7 @@ Per constitution Article 4: for either duty, if nothing new emerged, write nothi
 setsid bash -c '
   cd "$1" || exit 1
   deny="Bash"
-  allow="Read,Glob,Grep,Edit(kb/governance/amendments/**),Edit(kb/improvements/**),Edit(.staging/**)"
+  allow="Read,Glob,Grep,Edit(kb/governance/amendments/**),Edit(kb/improvements/**),Edit(.autopoietic/staging/**)"
   {
     echo "=== $(date -Is) end-session review starting"
     echo "--- effective grant: --model claude-sonnet-5 --disallowedTools $deny --allowedTools $allow"

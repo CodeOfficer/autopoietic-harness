@@ -6,12 +6,12 @@ fi
 set -u
 repo_dir="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 
-# Opt-in check: Active only if target repo was initialized via /init (has kb/governance/constitution.md or .claude/autopoietic-enabled) or is the plugin engine itself
-if [ ! -f "$repo_dir/kb/governance/constitution.md" ] && [ ! -f "$repo_dir/.claude/autopoietic-enabled" ] && [ ! -f "$repo_dir/.claude-plugin/plugin.json" ]; then
+# Opt-in check: Active only if target repo was initialized via /init (has kb/governance/constitution.md or .autopoietic/enabled) or is the plugin engine itself
+if [ ! -f "$repo_dir/kb/governance/constitution.md" ] && [ ! -f "$repo_dir/.autopoietic/enabled" ] && [ ! -f "$repo_dir/.claude-plugin/plugin.json" ]; then
   exit 0
 fi
 
-friction_proposals="$repo_dir/.claude/friction/proposals.json"
+friction_proposals="$repo_dir/.autopoietic/friction/proposals.json"
 
 kb_files="$(grep -rl "^status: proposed" "$repo_dir/kb" 2>/dev/null | sed "s|^$repo_dir/||" || true)"
 
@@ -29,7 +29,7 @@ fi
 
 kb_count=0
 if [ -n "$kb_files" ]; then
-  kb_count=$(printf '%s\n' "$kb_files" 2>/dev/null | wc -l | tr -d ' ')
+  kb_count=$(printf '%s\n' "$kb_files" | wc -l | tr -d ' ')
 fi
 
 total=$((kb_count + json_count))
@@ -43,9 +43,9 @@ if [ -n "$kb_files" ]; then
   list="$(printf '%s\n' "$kb_files" | paste -sd ', ' -)"
 fi
 if [ -n "$list" ]; then
-  list="$list, .claude/friction/proposals.json ($json_count item(s))"
+  list="$list, .autopoietic/friction/proposals.json ($json_count item(s))"
 else
-  list=".claude/friction/proposals.json ($json_count item(s))"
+  list=".autopoietic/friction/proposals.json ($json_count item(s))"
 fi
 
 printf '{"systemMessage": "%s proposal(s) awaiting ratification: %s — run /autopoietic-harness:ratify to review"}\n' "$total" "$list"

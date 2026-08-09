@@ -11,22 +11,22 @@ Apply the owner's decision on pending proposals: promote staged artifacts into t
 
 ## Inputs
 
-- Pending items: files with `status: proposed` listed in `kb/improvements/index.md`, `kb/governance/amendments/index.md`, or `.claude/friction/proposals.json`.
-- Their staged artifacts, if any, under `.staging/<proposal-id>/`.
+- Pending items: files with `status: proposed` listed in `kb/improvements/index.md`, `kb/governance/amendments/index.md`, or `.autopoietic/friction/proposals.json`.
+- Their staged artifacts, if any, under `.autopoietic/staging/<proposal-id>/`.
 - Plugin environment options: `CLAUDE_PLUGIN_OPTION_PLUGIN_SOURCE_PATH` (default `~/code/autopoietic-harness`).
 - The lifecycle rules in `core-kb/self-improvement.md`.
 
 ## Initialization Guard (Prerequisite)
 
 Before running ratify, check if the current repository is initialized with Autopoietic Harness:
-- Verify that `kb/governance/constitution.md` or `.claude/autopoietic-enabled` exists in the working repository root (`$CLAUDE_PROJECT_DIR`).
+- Verify that `kb/governance/constitution.md` or `.autopoietic/enabled` exists in the working repository root (`$CLAUDE_PROJECT_DIR`).
 - **If NOT initialized**: Stop immediately and tell the owner:
   > ⚠️ **Autopoietic Harness is not initialized in this repository.**  
   > Please run `/autopoietic-harness:init` first to scaffold the local governance structure and knowledge base.
 
 ## Steps
 
-1. Find every pending item (`status: proposed` in the two indexes or `.claude/friction/proposals.json`).
+1. Find every pending item (`status: proposed` in the two indexes or `.autopoietic/friction/proposals.json`).
 2. **Manifest before any vote.** Output one chat message containing a card for EVERY pending item, in this exact shape:
 
    - Header: `📌 Item N: <Title>` — always starting with the 📌 emoji.
@@ -37,7 +37,7 @@ Before running ratify, check if the current repository is initialized with Autop
    - **Risks & dissents** — panel objections, edge cases, potential breakages.
 3. **Target Destination Selection (Maintainer Upstream Mode)**:
    - For each proposal to be adopted, ask the owner whether to:
-     - **Option A: Adopt Locally (Target Repository)**: Apply staged changes and KB entries directly to the current repository (`kb/`, `.staging/`).
+     - **Option A: Adopt Locally (Target Repository)**: Apply staged changes and KB entries directly to the current repository (`kb/`, `.autopoietic/staging/`).
      - **Option B: Promote Upstream (Maintainer Mode)**: Copy staged artifacts and KB entries directly into `$CLAUDE_PLUGIN_OPTION_PLUGIN_SOURCE_PATH` (e.g., `~/code/autopoietic-harness`) for global plugin distribution.
 4. **Single-screen, item-by-item decisions.** After the full manifest, take decisions in ONE step covering all items: a single selection prompt listing every item together.
 5. **Adopt:** verify the target tier is legitimate; apply the artifact to its designated location (Local or Upstream); set `status: adopted`.
@@ -46,7 +46,7 @@ Before running ratify, check if the current repository is initialized with Autop
 
 ## Constraints
 
-- Requires repository initialization (`kb/governance/constitution.md` or `.claude/autopoietic-enabled`).
+- Requires repository initialization (`kb/governance/constitution.md` or `.autopoietic/enabled`).
 - Only runs interactively at the owner's request — never from a hook or headless session.
 - The manifest always precedes the options: the owner never votes on an item explained only by a label.
 - Every card carries its 📌 header and its Bottom Line (ELI5) first.

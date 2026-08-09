@@ -25,5 +25,6 @@ Knowledge lives in layered `kb/` directories (Open Knowledge Format — see `kb/
 - `templates/` — scaffolding templates for `/init`
 - `.claude-plugin/` — plugin manifest (`plugin.json`) and lifecycle bindings (`hooks.json`)
 - `kb/` — repository governance and local knowledge base
-- `.staging/` — inert quarantine for artifacts of pending proposals
+- `.autopoietic/` — local plugin state (friction telemetry ledger, staging quarantine, enabled flag)
+
 

@@ -5,12 +5,12 @@ fi
 
 repo_dir="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 
-# Opt-in check: Active only if target repo was initialized via /init (has kb/governance/constitution.md or .claude/autopoietic-enabled) or is the plugin engine itself
-if [ ! -f "$repo_dir/kb/governance/constitution.md" ] && [ ! -f "$repo_dir/.claude/autopoietic-enabled" ] && [ ! -f "$repo_dir/.claude-plugin/plugin.json" ]; then
+# Opt-in check: Active only if target repo was initialized via /init (has kb/governance/constitution.md or .autopoietic/enabled) or is the plugin engine itself
+if [ ! -f "$repo_dir/kb/governance/constitution.md" ] && [ ! -f "$repo_dir/.autopoietic/enabled" ] && [ ! -f "$repo_dir/.claude-plugin/plugin.json" ]; then
   exit 0
 fi
 
-mkdir -p "$repo_dir/.claude/friction"
+mkdir -p "$repo_dir/.autopoietic/friction"
 
 (
   python3 -c '
@@ -38,7 +38,7 @@ out = {
     "detail": redacted_detail if redacted_detail else None,
 }
 print(json.dumps(out, default=str))
-' "${1:-unknown}" >> "$repo_dir/.claude/friction/events.jsonl"
+' "${1:-unknown}" >> "$repo_dir/.autopoietic/friction/events.jsonl"
 ) 2>/dev/null || true
 
 exit 0

@@ -29,10 +29,11 @@ Upgrade legacy single-repo harness setups (which placed hook scripts and skills 
    - Archive or remove obsolete `.claude/hooks/` (`end-session-review.sh`, `log-friction.sh`, `pending-proposals.sh`).
    - Archive or remove legacy `.claude/skills/` (`governance-convention`, `ratify`, `skill-authoring`).
 
-3. **Preserve & Ensure Repository State (KB & Opt-In)**:
+3. **Preserve & Migrate Repository State (KB & Opt-In)**:
    - Ensure local `kb/` (`constitution.md`, amendments, improvements) remains intact in the repository root.
-   - Create `.claude/autopoietic-enabled` opt-in flag.
-   - Keep `.claude/friction/` and `.staging/` in `.gitignore`.
+   - Migrate any existing `.claude/friction/` logs to `.autopoietic/friction/`.
+   - Create `.autopoietic/enabled` opt-in flag.
+   - Ensure `.gitignore` includes `.autopoietic/`.
 
 4. **Verify Plugin Integration**:
    - Ensure plugin manifest and hook bindings are active.

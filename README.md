@@ -38,8 +38,8 @@ To activate Autopoietic Harness in a project repository:
 - `kb/governance/constitution.md` — The active 7 Constitutional Laws.
 - `kb/index.md` — Local knowledge base index.
 - `CLAUDE.md` — Project governance rules.
-- `.claude/autopoietic-enabled` — Opt-in flag enabling harness hooks.
-- `.gitignore` — Entries for `.claude/friction/` and `.staging/`.
+- `.autopoietic/` — Plugin state directory containing `.autopoietic/enabled`, `.autopoietic/friction/`, `.autopoietic/staging/`.
+- `.gitignore` — Entry for `.autopoietic/`.
 
 ---
 
