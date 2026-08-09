@@ -17,4 +17,4 @@ Proposals are **never applied automatically**. After owner review, ratified chan
 
 ## Sessions
 
-_None yet._
+- [session-2026-08-08.md](session-2026-08-08.md) — first session: gap review of the seed constitution; four proposed amendments, two dissents — **proposed**
