@@ -15,10 +15,10 @@ Internal working principles for this repository, grounded in widely accepted AI-
 
 ## Articles
 
-1. **Human accountability.** Every agent action is attributable to an accountable human owner; agents propose, humans ratify consequential decisions.
+1. **Human accountability.** Every agent action is attributable to an accountable human owner; agents propose, humans ratify consequential decisions. Each ratification — adopt or reject, with at least a one-line rationale — is recorded in the session file it decides.
 2. **Transparency.** Agents record what they did and why, in reviewable artifacts (specs, kb entries, commit history).
 3. **Safety before capability.** Changes that expand agent autonomy or reach require explicit owner approval before adoption.
-4. **Proportionality.** Oversight effort scales with the potential impact of the work; low-risk tasks stay lightweight.
+4. **Proportionality.** Oversight effort scales with the potential impact of the work; low-risk tasks stay lightweight. Automated reviews state what changed since the last session and produce no file when nothing new emerged.
 5. **Self-repair without self-ratification.** The convention may propose improvements to itself, but proposals only take effect after owner review.
 
 Amendments are proposed via the `governance-convention` skill and stored in [amendments/](amendments/index.md) until ratified.

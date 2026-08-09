@@ -21,6 +21,8 @@ Five expert personas, each drafting independently before any debate:
 
 Plus two roles: a **facilitator**, who collects proposals, structures debate, and surfaces disagreements without advocating; and a **chair**, who rules on process and distills debate into concise proposed amendments.
 
+The panel is a prompt device: all personas are simulated by one model. Sessions are structured self-review, not independent oversight, and must never be presented as such.
+
 ## Inputs
 
 - Current constitution: `kb/governance/constitution.md`.
@@ -34,7 +36,7 @@ Plus two roles: a **facilitator**, who collects proposals, structures debate, an
 3. The facilitator groups overlapping proposals and surfaces every disagreement explicitly — do not smooth them over.
 4. The panel debates the disagreements; the chair distills the result into a concise set of proposed amendments, recording dissents.
 5. **End-session review:** the panel identifies gaps, contradictions, and proposed improvements to the convention itself (this skill, the panel, the process).
-6. Write one session file to `kb/governance/amendments/session-YYYY-MM-DD.md` (OKF frontmatter per `kb/okf-format.md`, `status: proposed`) containing: proposed amendments, dissents, and the end-session review. Add it to `kb/governance/amendments/index.md`.
+6. Write one session file to `kb/governance/amendments/session-YYYY-MM-DD.md` — append `-2`, `-3`, … if that name already exists (OKF frontmatter per `kb/okf-format.md`, `status: proposed`) — containing: proposed amendments, dissents, and the end-session review. Add it to `kb/governance/amendments/index.md`. If nothing new emerged since the latest session file, write no file and say so.
 
 ## End-session enforcement
 
