@@ -37,12 +37,17 @@ Per constitution Article 4: for either duty, if nothing new emerged, write nothi
 # Detach so session exit is not blocked; the child cleans up the lock.
 setsid bash -c '
   cd "$1" || exit 1
+  # Single source of truth for the grant: logged and passed from the same variables,
+  # so the log can never claim a containment the run did not actually receive (Art. 7).
+  deny="Bash"
+  allow="Read,Glob,Grep,Edit(kb/governance/amendments/**),Edit(kb/improvements/**),Edit(.staging/**)"
   {
     echo "=== $(date -Is) end-session review starting"
+    echo "--- effective grant: --model claude-sonnet-5 --disallowedTools $deny --allowedTools $allow"
     GOVERNANCE_REVIEW_HOOK=1 claude -p "$2" \
       --model claude-sonnet-5 \
-      --disallowedTools "Bash" \
-      --allowedTools "Read,Glob,Grep,Edit(kb/governance/amendments/**),Edit(kb/improvements/**),Edit(.staging/**)"
+      --disallowedTools "$deny" \
+      --allowedTools "$allow"
     rc=$?
     [ "$rc" -eq 0 ] && rm -f "$5"
     echo "=== $(date -Is) end-session review finished (exit $rc)"

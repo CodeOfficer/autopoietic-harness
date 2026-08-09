@@ -20,10 +20,12 @@ Proposals are **never applied automatically**. After owner review, ratified chan
 - [session-2026-08-08.md](session-2026-08-08.md) — first session: gap review of the seed constitution; four proposed amendments, two dissents — **adopted**
 - [session-2026-08-08-2.md](session-2026-08-08-2.md) — end-session review: convention self-consistency fixes, ratification-record amendment, two dissents — **adopted**
 - [session-2026-08-09.md](session-2026-08-09.md) — end-session review: Article 7 telemetry-boundary amendment (self-improvement lifecycle), three carryover gaps formalized, two dissents — **adopted**
+- [session-2026-08-09-2.md](session-2026-08-09-2.md) — end-session review: this run's own tool access contradicted the documented headless-review containment (ran git, had unrestricted Bash/Write despite `--allowedTools` and an explicit "do not run git" instruction); Article 7 verifiability amendment, one dissent — **adopted** (findings partly corrected on ratification: writes were contained; shell access was real and is now denied)
 
 ## Carryover gaps
 
 Gaps raised in an end-session review but not yet formalized into a proposal. Cleared when a later session turns the item into a proposed amendment/improvement (moved out of this list) or the owner rejects it outright.
 
-- Redaction enforcement at the ledger→`kb/` boundary (product engineer's dissent on session-2026-08-09 item 1): Article 7 now states the guarantee, but no mechanism enforces it. Awaiting real friction events, or an owner-directed improvement proposal.
+- Redaction enforcement at the ledger→`kb/` boundary (product engineer's dissent on session-2026-08-09 item 1): Article 7 now states the guarantee, but no mechanism enforces it. One real friction event now exists (2026-08-09) but is a single non-recurring occurrence with no ledger-detail quoting involved — still awaiting either a recurring pattern or an owner-directed improvement proposal.
 - Ethicist as a full persona rather than an extended brief (standing dissent): revisit if any project becomes user-facing or handles third-party data.
+- ~~Root cause of the `--allowedTools` non-enforcement observed in session-2026-08-09-2~~ — **closed 2026-08-09**: allow-lists don't restrict; read-only shell was auto-approved. Shell now denied outright (`1ef0b7c`); staging relocated to a writable path (`bfeaefb`).
