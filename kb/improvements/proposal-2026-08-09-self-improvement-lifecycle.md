@@ -3,7 +3,7 @@ id: kb-imp-self-improvement-lifecycle
 title: Self-Improvement Lifecycle
 description: Proposal to generalize the governance self-repair loop into friction-driven self-improvement
 tags: [improvements, lifecycle, meta]
-status: proposed
+status: adopted
 updated: 2026-08-09
 owner: codeofficer
 related: [kb-self-improvement, kb-primitive-selection, kb-gov-end-session-review]
@@ -25,6 +25,10 @@ Generalize the adopted governance loop (observe → synthesize → propose → r
 - One combined reviewer run (governance + friction synthesis).
 - Staging location: `.claude/staging/`.
 - Tier-2 graduation threshold: ratified in ≥2 projects.
+
+## Ratification (2026-08-09)
+
+**Adopted** by the owner, who set the three parameters above. Implemented: friction-logging hooks, `kb/primitive-selection.md`, `kb/self-improvement.md`, widened end-session reviewer, `ratify` skill, friction-note rule in root `CLAUDE.md`. Acceptance criteria verified by stub tests at implementation time; ongoing check is whether ledger events produce proposals only when new.
 
 ## Acceptance criteria
 

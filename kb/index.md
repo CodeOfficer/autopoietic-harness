@@ -17,7 +17,10 @@ Repository-wide knowledge. More-local `kb/` directories (e.g. inside a project) 
 
 - [okf-format.md](okf-format.md) — the Open Knowledge Format used by every `kb/` in this repo
 - [layered-knowledge.md](layered-knowledge.md) — how layered `kb/` directories resolve
+- [self-improvement.md](self-improvement.md) — how observed friction becomes ratified harness improvements
+- [primitive-selection.md](primitive-selection.md) — rubric for choosing the mechanism that fixes a root cause
 
 ## Sub-bases
 
 - [governance/](governance/index.md) — AI-governance constitution and proposed amendments
+- [improvements/](improvements/index.md) — friction-driven improvement proposals awaiting owner review

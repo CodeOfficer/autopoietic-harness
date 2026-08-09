@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# SessionEnd hook: run the governance-convention end-session review headlessly.
-# Proposals land in kb/governance/amendments/ for owner review; nothing is auto-adopted.
+# SessionEnd hook: run the automated end-session review (governance + friction synthesis) headlessly.
+# Proposals land in kb/governance/amendments/ and kb/improvements/ for owner review; nothing is auto-adopted.
 set -u
 
 # Recursion guard: the headless review session fires SessionEnd too.
@@ -10,6 +10,8 @@ repo_dir="${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "$0")/../.." && pwd)}"
 hooks_dir="$repo_dir/.claude/hooks"
 lock="$hooks_dir/.review.lock"
 log="$hooks_dir/end-session-review.log"
+friction="$repo_dir/.claude/friction"
+pending="$friction/events.pending.jsonl"
 
 # One review at a time; a held lock means a review is already running.
 # A lock older than 60 min is from a crashed review — reclaim it.
@@ -18,12 +20,19 @@ if [ -d "$lock" ] && [ -n "$(find "$lock" -maxdepth 0 -mmin +60 2>/dev/null)" ];
 fi
 mkdir "$lock" 2>/dev/null || exit 0
 
+# Rotate the friction ledger; pending accumulates until a review succeeds.
+if [ -s "$friction/events.jsonl" ]; then
+  cat "$friction/events.jsonl" >> "$pending" && rm -f "$friction/events.jsonl"
+fi
+
 today="$(date +%F)"
-prompt="Follow .claude/skills/governance-convention/SKILL.md in end-session review mode.
-Read kb/governance/constitution.md and every file in kb/governance/amendments/.
-Identify gaps, contradictions, and proposed improvements to the constitution and to the convention itself, and draft concise proposed amendments with grounding per the skill.
-Write ONE new file kb/governance/amendments/session-${today}.md (append -2, -3, ... if that name exists) with OKF frontmatter per kb/okf-format.md and status: proposed, then add it to the Sessions list in kb/governance/amendments/index.md marked proposed.
-Do not modify any other file. Do not apply any proposal. Do not run git commands. If nothing new emerged since the latest session file, write no file and say so."
+prompt="You are the automated end-session reviewer. Perform BOTH duties in this one run.
+
+1) Governance review, following .claude/skills/governance-convention/SKILL.md in end-session review mode: read kb/governance/constitution.md and every file in kb/governance/amendments/. If gaps or contradictions warrant it, write ONE file kb/governance/amendments/session-${today}.md (append -2, -3, ... if that name exists) with OKF frontmatter per kb/okf-format.md and status: proposed, and add it to the index there.
+
+2) Friction synthesis, following kb/self-improvement.md: read .claude/friction/events.pending.jsonl if it exists. Cluster recurring events by root cause. For each root cause, choose the cheapest fitting primitive per kb/primitive-selection.md and write kb/improvements/proposal-${today}-<slug>.md (status: proposed) stating the primitive, why cheaper ones don't suffice, the target tier (project-local unless graduation evidence: ratified in >=2 projects, or a stated project-agnostic argument), and acceptance criteria. Materialize any executable artifact under .claude/staging/<proposal-id>/. Add each proposal to kb/improvements/index.md.
+
+Per constitution Article 4: for either duty, if nothing new emerged, write nothing for it and say so. Do not modify any other file. Do not apply any proposal. Do not run git commands."
 
 # Detach so session exit is not blocked; the child cleans up the lock.
 setsid bash -c '
@@ -32,10 +41,12 @@ setsid bash -c '
     echo "=== $(date -Is) end-session review starting"
     GOVERNANCE_REVIEW_HOOK=1 claude -p "$2" \
       --model claude-sonnet-5 \
-      --allowedTools "Read,Glob,Grep,Edit(kb/governance/amendments/**)"
-    echo "=== $(date -Is) end-session review finished (exit $?)"
+      --allowedTools "Read,Glob,Grep,Edit(kb/governance/amendments/**),Edit(kb/improvements/**),Edit(.claude/staging/**)"
+    rc=$?
+    [ "$rc" -eq 0 ] && rm -f "$5"
+    echo "=== $(date -Is) end-session review finished (exit $rc)"
   } > "$3" 2>&1
   rmdir "$4" 2>/dev/null
-' _ "$repo_dir" "$prompt" "$log" "$lock" < /dev/null > /dev/null 2>&1 &
+' _ "$repo_dir" "$prompt" "$log" "$lock" "$pending" < /dev/null > /dev/null 2>&1 &
 
 exit 0

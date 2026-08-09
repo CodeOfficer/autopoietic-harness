@@ -1,3 +1,4 @@
 .claude/settings.local.json
 .claude/hooks/*.log
 .claude/hooks/.review.lock/
+.claude/friction/

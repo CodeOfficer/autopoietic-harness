@@ -17,4 +17,4 @@ Proposals are **never applied automatically**. The owner decides via the `ratify
 
 ## Proposals
 
-- [proposal-2026-08-09-self-improvement-lifecycle.md](proposal-2026-08-09-self-improvement-lifecycle.md) — the friction-observation and promotion lifecycle itself — **proposed**
+- [proposal-2026-08-09-self-improvement-lifecycle.md](proposal-2026-08-09-self-improvement-lifecycle.md) — the friction-observation and promotion lifecycle itself — **adopted**

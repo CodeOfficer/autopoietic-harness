@@ -14,6 +14,7 @@ Knowledge lives in layered `kb/` directories (Open Knowledge Format — see `kb/
 
 - Before adopting any convention not clearly implied by existing repository files, ask the repository owner first.
 - Keep every file short, focused, and single-purpose.
+- On recurring friction (repeated failures, guessed conventions, retries), append a one-line JSON note to `.claude/friction/events.jsonl` (see `kb/self-improvement.md`).
 - OKF concept files use the frontmatter schema defined in `kb/okf-format.md`.
 
 ## Layout
