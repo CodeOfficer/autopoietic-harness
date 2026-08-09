@@ -24,8 +24,18 @@ event_threshold="${CLAUDE_PLUGIN_OPTION_EVENT_THRESHOLD:-3}"
 
 # Quarantine Mode: Global ~/.autopoietic/staging vs Local .autopoietic/staging
 if [ "${CLAUDE_PLUGIN_OPTION_QUARANTINE_MODE:-false}" = "true" ]; then
-  repo_slug="$(basename "$repo_dir")"
-  staging_dir="$HOME/.autopoietic/staging/$repo_slug"
+  repo_id=$(python3 -c '
+import subprocess, hashlib, os, sys
+cwd = sys.argv[1]
+try:
+    git_dir = subprocess.check_output(["git", "rev-parse", "--git-common-dir"], cwd=cwd, stderr=subprocess.DEVNULL, text=True).strip()
+    abs_git_dir = os.path.abspath(os.path.join(cwd, git_dir))
+    h = hashlib.sha256(abs_git_dir.encode()).hexdigest()[:12]
+except Exception:
+    h = hashlib.sha256(os.path.abspath(cwd).encode()).hexdigest()[:12]
+print(f"{os.path.basename(cwd)}-{h}")
+' "$repo_dir" 2>/dev/null || echo "$(basename "$repo_dir")")
+  staging_dir="$HOME/.autopoietic/staging/$repo_id"
 else
   staging_dir="$repo_dir/.autopoietic/staging"
 fi
