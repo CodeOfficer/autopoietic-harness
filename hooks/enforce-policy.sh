@@ -10,7 +10,7 @@ if [ ! -f "$repo_dir/kb/governance/constitution.md" ] && [ ! -f "$repo_dir/.auto
   exit 0
 fi
 
-# Run policy enforcement checks via Python
+# Run Autopoietic Harness domain policy checks via Python
 python3 -c '
 import json, sys, re
 
@@ -25,17 +25,17 @@ tool_input = data.get("tool_input", {})
 file_path = str(tool_input.get("file_path") or tool_input.get("path") or "")
 content = str(tool_input.get("content") or tool_input.get("new_string") or "")
 
-# 1. Secret Leakage Prevention (Article 7)
-if file_path.startswith("kb/") or file_path.startswith("core-kb/"):
+# 1. Harness Telemetry & KB Secret Guard (Article 7)
+if file_path.startswith("kb/") or file_path.startswith(".autopoietic/"):
     if SECRET_REGEX.search(content):
         res = {
             "continue": False,
-            "systemMessage": "⚠️ Policy Violation (Article 7): Secret/API key pattern detected in write payload. Secrets must never enter kb/."
+            "systemMessage": "⚠️ Autopoietic Policy Violation (Article 7): Secret/API key pattern detected. Secrets must never be stored in kb/ or harness telemetry."
         }
         print(json.dumps(res))
         sys.exit(0)
 
-# 2. OKF Frontmatter Validation on kb/ entries
+# 2. OKF Frontmatter Validation on kb/ concept entries
 if file_path.startswith("kb/") and file_path.endswith(".md") and not file_path.endswith("index.md"):
     if content.startswith("---"):
         parts = content.split("---", 2)
@@ -46,29 +46,29 @@ if file_path.startswith("kb/") and file_path.endswith(".md") and not file_path.e
             if missing:
                 res = {
                     "continue": False,
-                    "systemMessage": f"⚠️ Policy Violation (OKF Schema): kb/ file is missing required YAML frontmatter fields: {", ".join(missing)}"
+                    "systemMessage": f"⚠️ Autopoietic Policy Violation (OKF Schema): kb/ concept entry missing required frontmatter fields: {", ".join(missing)}"
                 }
                 print(json.dumps(res))
                 sys.exit(0)
         else:
             res = {
                 "continue": False,
-                "systemMessage": "⚠️ Policy Violation (OKF Schema): kb/ file must contain valid --- YAML frontmatter --- header."
+                "systemMessage": "⚠️ Autopoietic Policy Violation (OKF Schema): kb/ concept entry must contain valid --- YAML frontmatter --- header."
             }
             print(json.dumps(res))
             sys.exit(0)
 
-# 3. Acceptance Criteria Validation on kb/improvements/ proposals
+# 3. Acceptance Criteria Guard on kb/improvements/ proposals (Article 6)
 if "kb/improvements/proposal-" in file_path:
     if "## Acceptance criteria" not in content and "## Acceptance Criteria" not in content:
         res = {
             "continue": False,
-            "systemMessage": "⚠️ Policy Violation (Article 6): Improvement proposals must include a ## Acceptance criteria section."
+            "systemMessage": "⚠️ Autopoietic Policy Violation (Article 6): Harness proposal missing required ## Acceptance criteria section."
         }
         print(json.dumps(res))
         sys.exit(0)
 
-# All checks passed cleanly
+# All harness policy checks passed cleanly
 print(json.dumps({"continue": True}))
 ' 2>/dev/null || exit 0
 
