@@ -1,0 +1,14 @@
+{
+  "name": "autopoietic-harness",
+  "owner": {
+    "name": "CodeOfficer"
+  },
+  "description": "Autopoietic Harness plugin marketplace for self-improving AI governance",
+  "plugins": [
+    {
+      "name": "autopoietic-harness",
+      "source": "./",
+      "description": "Additive self-improving AI governance harness and layered knowledge engine for Claude Code"
+    }
+  ]
+}

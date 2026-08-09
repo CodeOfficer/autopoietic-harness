@@ -1,0 +1,41 @@
+{
+  "name": "autopoietic-harness",
+  "version": "1.0.0",
+  "description": "Additive self-improving AI governance harness and layered knowledge engine",
+  "author": {
+    "name": "CodeOfficer"
+  },
+  "hooks": "./.claude-plugin/hooks.json",
+  "userConfig": {
+    "enabled": {
+      "title": "Enable Plugin",
+      "type": "boolean",
+      "description": "Master kill switch (true/false)",
+      "default": true
+    },
+    "quarantine_mode": {
+      "title": "Quarantine Mode",
+      "type": "boolean",
+      "description": "Stage proposals in global ~/.claude/autopoietic/staging instead of repo .staging/ (true/false)",
+      "default": false
+    },
+    "plugin_source_path": {
+      "title": "Plugin Source Path",
+      "type": "directory",
+      "description": "Path to autopoietic-harness plugin repository for Maintainer Mode",
+      "default": "~/code/autopoietic-harness"
+    },
+    "event_threshold": {
+      "title": "Event Threshold",
+      "type": "number",
+      "description": "Minimum un-synthesized friction events before triggering end-session review",
+      "default": 3
+    },
+    "cooldown_minutes": {
+      "title": "Cooldown Period (Minutes)",
+      "type": "number",
+      "description": "Cooldown period in minutes between automated background synthesis reviews",
+      "default": 60
+    }
+  }
+}
