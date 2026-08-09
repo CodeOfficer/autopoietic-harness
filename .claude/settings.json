@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/end-session-review.sh",
+            "timeout": 15,
+            "statusMessage": "Launching governance end-session review"
+          }
+        ]
+      }
+    ]
+  }
+}

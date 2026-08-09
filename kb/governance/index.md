@@ -16,6 +16,7 @@ Outputs of the constitutional convention (see the `governance-convention` skill)
 ## Concepts
 
 - [constitution.md](constitution.md) — the current constitutional laws for safe, accountable AI development
+- [end-session-review.md](end-session-review.md) — how the SessionEnd hook auto-runs the convention's review
 
 ## Sub-bases
 

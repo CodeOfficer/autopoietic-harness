@@ -36,6 +36,10 @@ Plus two roles: a **facilitator**, who collects proposals, structures debate, an
 5. **End-session review:** the panel identifies gaps, contradictions, and proposed improvements to the convention itself (this skill, the panel, the process).
 6. Write one session file to `kb/governance/amendments/session-YYYY-MM-DD.md` (OKF frontmatter per `kb/okf-format.md`, `status: proposed`) containing: proposed amendments, dissents, and the end-session review. Add it to `kb/governance/amendments/index.md`.
 
+## End-session enforcement
+
+The end-session review (step 5–6) is not only manual: a `SessionEnd` hook in `.claude/settings.json` runs `.claude/hooks/end-session-review.sh`, which performs the review headlessly after every session and saves proposals to `kb/governance/amendments/`. See `kb/governance/end-session-review.md`.
+
 ## Outputs
 
 - One OKF session file of proposed amendments and convention improvements, saved for owner review.
