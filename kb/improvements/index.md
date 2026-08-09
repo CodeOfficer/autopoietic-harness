@@ -18,3 +18,4 @@ Proposals are **never applied automatically**. The owner decides via the `ratify
 ## Proposals
 
 - [proposal-2026-08-09-self-improvement-lifecycle.md](proposal-2026-08-09-self-improvement-lifecycle.md) — the friction-observation and promotion lifecycle itself — **adopted**
+- [proposal-2026-08-09-pending-proposals-visibility.md](proposal-2026-08-09-pending-proposals-visibility.md) — SessionStart hook surfacing the ratification queue — **adopted**
